@@ -150,3 +150,31 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE atualizar_resumos()
+BEGIN
+    DECLARE done INT DEFAULT 0;
+    DECLARE livro_id INT;
+    DECLARE livro_resumo TEXT;
+    DECLARE cur CURSOR FOR SELECT id, resumo FROM Livro;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+    
+    OPEN cur;
+    
+    read_loop: LOOP
+        FETCH cur INTO livro_id, livro_resumo;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        SET livro_resumo = CONCAT(livro_resumo, ' Este é um excelente livro!');
+        
+        UPDATE Livro SET resumo = livro_resumo WHERE id = livro_id;
+    END LOOP;
+    
+    CLOSE cur;
+END;
+//
+DELIMITER ;
