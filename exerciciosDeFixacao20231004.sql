@@ -195,3 +195,36 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+DELIMITER //
+CREATE FUNCTION autores_sem_livros() RETURNS TEXT
+BEGIN
+    DECLARE autor_list TEXT;
+    DECLARE done INT DEFAULT 0;
+    DECLARE autor_id INT;
+    
+    DECLARE cur CURSOR FOR SELECT id FROM Autor;
+    
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = 1;
+    
+    OPEN cur;
+    
+    SET autor_list = '';
+    
+    read_loop: LOOP
+        FETCH cur INTO autor_id;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        
+        IF NOT EXISTS (SELECT 1 FROM Livro_Autor WHERE id_autor = autor_id) THEN
+            SET autor_list = CONCAT(autor_list, ',', autor_id);
+        END IF;
+    END LOOP;
+    
+    CLOSE cur;
+    
+    RETURN SUBSTRING(autor_list, 2);
+END;
+//
+DELIMITER ;
