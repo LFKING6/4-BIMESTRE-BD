@@ -52,3 +52,14 @@ BEGIN
         VALUES CONCAT(velho.nome, novo.nome);
 END
 
+DELIMITER //
+CREATE TRIGGER autorizar_atualizar_cliente
+BEFORE UPDATE 
+ON Clientes FOR EACH ROW
+BEGIN
+    IF (velho.nome = OR novo.nome IS NULL) THEN
+    INSERT INTO Auditoria
+    VALUES CONCAT('O nome não deve ser nulo!')
+END
+//
+DELIMITER;
