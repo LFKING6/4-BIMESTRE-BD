@@ -41,7 +41,7 @@ ON Clientes FOR EACH ROW
 BEGIN
     INSERT INTO Audiotoria
     VALUES CONCAT('Uma tentativa de exclusão foi feita!')
-END
+END;
 
 CREATE TRIGGER atualizar_cliente
 AFTER UPDATE 
@@ -50,7 +50,7 @@ BEGIN
     IF velho.nome <> novo.nome THEN
         INSERT INTO Auditoria
         VALUES CONCAT(velho.nome, novo.nome);
-END
+END;
 
 DELIMITER //
 CREATE TRIGGER autorizar_atualizar_cliente
@@ -60,6 +60,16 @@ BEGIN
     IF (velho.nome = OR novo.nome IS NULL) THEN
     INSERT INTO Auditoria
     VALUES CONCAT('O nome não deve ser nulo!')
-END
+END;
+//
+DELIMITER;
+
+DELIMITER //
+CREATE TRIGGER inserir_pedido_cliente
+AFTER INSERT 
+ON Pedidos FOR EACH ROW
+BEGIN
+    
+END;
 //
 DELIMITER;
