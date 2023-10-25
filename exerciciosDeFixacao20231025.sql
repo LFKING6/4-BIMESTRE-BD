@@ -31,6 +31,14 @@ ON Clientes
 AFTER INSERT 
 AS
 BEGIN
-	INSERT INTO Auditoria(data_hora)
+    INSERT INTO Auditoria(data_hora)
     VALUES ('06/12/2023 12:00')
 END;
+
+CREATE TRIGGER deletar_cliente
+BEFORE DELETE
+ON Clientes FOR EACH ROW
+BEGIN
+    INSERT INTO Audiotoria
+    VALUES CONCAT ('Uma tentativa de exclusão foi feita!')
+END
