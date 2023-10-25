@@ -40,5 +40,15 @@ BEFORE DELETE
 ON Clientes FOR EACH ROW
 BEGIN
     INSERT INTO Audiotoria
-    VALUES CONCAT ('Uma tentativa de exclusão foi feita!')
+    VALUES CONCAT('Uma tentativa de exclusão foi feita!')
 END
+
+CREATE TRIGGER atualizar_cliente
+AFTER UPDATE 
+ON Clientes FOR EACH ROW
+BEGIN
+    IF velho.nome <> novo.nome THEN
+        INSERT INTO Auditoria
+        VALUES CONCAT(velho.nome, novo.nome);
+END
+
